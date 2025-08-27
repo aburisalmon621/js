@@ -96,7 +96,7 @@ javascript:(async function () {
       const name = q(doc, `.score_area .list li:nth-of-type(${i}) .name a`);
       if (name.match(targetName)) return i;
     }
-    return -1;
+    return -41;
   };
 
   const userRank = getRank(nameText);    // 1人目
