@@ -156,7 +156,7 @@ javascript:(async function () {
     const id = links[count];
     const data = await fetchScore(id);
 
-    $("#tx").append(Object.values(data).join(";;;") + "\n");
+    $("#tx").append(Object.values(data).join(`\t`) + "\n");
     count++;
     setTimeout(process, 0);
   }
