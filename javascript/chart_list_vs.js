@@ -178,7 +178,7 @@ javascript: (async function () {
         const userscoreText = q(doc, `.score_area li:nth-of-type(${userRank}) .score`);
         const usercomboText = q(doc, `.score_area li:nth-of-type(${userRank}) .combo`);
         const usertimeText = q(doc, `.score_area li:nth-of-type(${userRank}) .time`);
-        if (id == 39494) userRank1 -= 1;
+        if (id == 39494) userRank -= 1;
         if (userscoreText.match(firstscoreText)) userRank = 1;
 
         /* ====== ユーザー2の情報 ====== */
