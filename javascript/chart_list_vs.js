@@ -1,5 +1,5 @@
-javascript:(async function () {
-    /* jQuery を読み込む */
+javascript: (async function () {
+    /*jQuery を読み込む*/
     const loadJQuery = () =>
         new Promise(resolve => {
             const script = document.createElement("script");
@@ -19,9 +19,7 @@ javascript:(async function () {
 
     let count = 0;
     let links = [];
-    let buffer = []; // テキストエリア用のバッファ
-
-    // 集計用
+    let tsv_datas = [];
     let score_max = 0;
     let score = 0;
     let rank_1 = 0;
@@ -31,7 +29,9 @@ javascript:(async function () {
     let rank_40 = 0;
     let rank_41 = 0;
     let rank_num = 0;
+    let rank_ave = 0;
     let acc = 0;
+    let acc_ave = 0;
 
     /* UI 準備 */
     $(".get").remove();
@@ -53,7 +53,9 @@ javascript:(async function () {
       color:#333;
     ">Player Data</h2>
     
-    <div class="data" style="margin-bottom:10px;">
+    <div class="data" style="
+      margin-bottom:10px;
+    ">
       <div class="score" style="font-weight:bold;"></div>
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));gap:8px;">
         <div class="rank_1"></div>
@@ -67,6 +69,7 @@ javascript:(async function () {
       </div>
       <div class="rank_ave"></div>
       <div class="acc"></div>
+      <div class="acc_ave"></div>
     </div>
 
     <textarea id="tx" cols="250" rows="30" style="
@@ -80,7 +83,6 @@ javascript:(async function () {
     "></textarea>
   </div>
 `);
-
     /* 進捗バー */
     $("body").append(`
     <div class="progress-fixed" style="
@@ -147,35 +149,91 @@ javascript:(async function () {
             return 41;
         };
 
-        let userRank = getRank(nameText);
-        let userRank2 = getRank(nameText2);
+        let userRank = getRank(nameText);    // 1人目
+        let userRank2 = getRank(nameText2);  // 2人目
 
+        /* ====== 1位の情報 ====== */
+        const firstnameText = q(doc, '.score_area li:nth-of-type(1) .name a');
+        let firstmodText = "-";
+        const firstmodElement = doc.querySelector('.score_area li:nth-of-type(1) .mod i');
+        if (firstmodElement) {
+            if (firstmodElement.classList.contains('g_mod_4')) firstmodText = "DH";
+            else if (firstmodElement.classList.contains('g_mod_5')) firstmodText = "RH";
+        }
+        const firstaccText = q(doc, '.score_area li:nth-of-type(1) .acc em');
+        const firstjudgecountText = doc.querySelector('.score_area li:nth-of-type(1)')?.getAttribute('title') || '-';
         const firstscoreText = q(doc, '.score_area li:nth-of-type(1) .score');
-        const userscoreText = q(doc, `.score_area li:nth-of-type(${userRank}) .score`);
+        const firstcomboText = q(doc, '.score_area li:nth-of-type(1) .combo');
+        const firsttimeText = q(doc, '.score_area li:nth-of-type(1) .time');
+
+        /* ====== ユーザー1の情報 ====== */
+        let usermodText = "-";
+        const usermodElement = doc.querySelector(`.score_area li:nth-of-type(${userRank}) .mod i`);
+        if (usermodElement) {
+            if (usermodElement.classList.contains('g_mod_4')) usermodText = "DH";
+            else if (usermodElement.classList.contains('g_mod_5')) usermodText = "RH";
+        }
         const useraccText = q(doc, `.score_area li:nth-of-type(${userRank}) .acc em`);
+        const userjudgecountText = doc.querySelector(`.score_area li:nth-of-type(${userRank})`)?.getAttribute('title') || '-';
+        const userscoreText = q(doc, `.score_area li:nth-of-type(${userRank}) .score`);
+        const usercomboText = q(doc, `.score_area li:nth-of-type(${userRank}) .combo`);
+        const usertimeText = q(doc, `.score_area li:nth-of-type(${userRank}) .time`);
+        if (userscoreText.match(firstscoreText)) userRank = 1;
 
-        // 集計
-        score_max += parseInt(firstscoreText);
-        if (userscoreText !== "-") score += parseInt(userscoreText);
-        if (userRank == 1) rank_1++;
-        else if (userRank == 2) rank_2++;
-        else if (userRank == 3) rank_3++;
-        else if (userRank <= 10) rank_10++;
-        else if (userRank <= 40) rank_40++;
-        else rank_41++;
-        rank_num += userRank;
-        if (useraccText !== "-") acc += parseFloat(useraccText);
+        /* ====== ユーザー2の情報 ====== */
+        let usermodText2 = "-";
+        const usermodElement2 = doc.querySelector(`.score_area li:nth-of-type(${userRank2}) .mod i`);
+        if (usermodElement2) {
+            if (usermodElement2.classList.contains('g_mod_4')) usermodText2 = "DH";
+            else if (usermodElement2.classList.contains('g_mod_5')) usermodText2 = "RH";
+        }
+        const useraccText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .acc em`);
+        const userjudgecountText2 = doc.querySelector(`.score_area li:nth-of-type(${userRank2})`)?.getAttribute('title') || '-';
+        const userscoreText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .score`);
+        const usercomboText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .combo`);
+        const usertimeText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .time`);
+        if (userscoreText2.match(firstscoreText)) userRank2 = 1;
 
-        return Object.values({
-            id,
+        return {
+            cId: q(doc, ".sub span"),
             title: q(doc, ".title").split(" - ")[1] || "Title not found",
             artist: q(doc, ".artist"),
+            mode: q(doc, ".mode span"),
+            editor: q(doc, '.mode a[href^="/accounts/user/"]'),
+            na: q(doc, ".g_cont2 .num span"),
+            hot: q(doc, ".g_cont2 .num:nth-of-type(3) span:nth-of-type(2)"),
+            gold: q(doc, ".g_cont2 .num:nth-of-type(2) span"),
+            cFirst: doc.querySelector(".g_tmpl_first:nth-of-type(1) .empty") ? "未" : "済",
+            dFirst: doc.querySelector(".g_tmpl_first:nth-of-type(3) .empty") ? "未" : "済",
+            eFirst: doc.querySelector(".g_tmpl_first:nth-of-type(2) .empty") ? "未" : "済",
+            lastUpdate: q(doc, ".sub span:nth-of-type(4)"),
+            // 1位情報
+            firstnameText,
+            firstmodText,
+            firstaccText,
+            firstjudgecountText,
+            firstscoreText,
+            firstcomboText,
+            firsttimeText,
+            // ユーザー1情報
             userRank,
-            userscoreText,
+            usermodText,
             useraccText,
-            userRank2
-        }).join("\t");
+            userjudgecountText,
+            userscoreText,
+            usercomboText,
+            usertimeText,
+            // ユーザー2情報
+            userRank2,
+            usermodText2,
+            useraccText2,
+            userjudgecountText2,
+            userscoreText2,
+            usercomboText2,
+            usertimeText2
+        };
     }
+
 
     function updateProgress(current, total) {
         const percent = Math.round((current / total) * 100);
@@ -190,32 +248,120 @@ javascript:(async function () {
         updateProgress(count, links.length);
 
         if (count >= links.length) {
-            // バッファを一括出力
-            $("#tx").val(buffer.join("\n"));
-
-            // 集計結果更新
-            $(".score").text(`score:${score}/${score_max} (${Math.round((score / score_max) * 100)}%)`);
-            $(".rank_1").text(`1st:${rank_1}`);
-            $(".rank_2").text(`2nd:${rank_2}`);
-            $(".rank_3").text(`3rd:${rank_3}`);
-            $(".rank_10").text(`Top10:${rank_10}`);
-            $(".rank_40").text(`Top40:${rank_40}`);
-            $(".rank_41").text(`NoRecord:${rank_41}`);
-            $(".rank_ave").text(`rank:${Math.round(rank_num / links.length)}`);
-            $(".acc").text(`acc:${Math.round((acc / links.length))}%`);
-
             alert("全てのリクエストが完了しました");
+            $("#tx").append(tsv_datas);
+            updateProgress(links.length, links.length);
             $(".progress-bar").css("background", "linear-gradient(90deg, #2196f3, #64b5f6)");
             return;
         }
 
         const id = links[count];
-        const line = await fetchScore(id);
-        buffer.push(line); // バッファに追加
+        const data = await fetchScore(id);
 
+        console.log(data.userscoreText);
+        score_max += parseInt(data.firstscoreText);
+        if (data.userscoreText != "-") {
+            score += parseInt(data.userscoreText);
+        }
+        if (data.userRank == 1) {
+            rank_1++;
+        }
+        else if (data.userRank == 2) {
+            rank_2++;
+        }
+        else if (data.userRank == 3) {
+            rank_3++;
+        }
+        else if (data.userRank <= 10) {
+            rank_10++;
+        }
+        else if (data.userRank <= 40) {
+            rank_40++;
+        }
+        else {
+            rank_41++;
+        }
+        rank_num += data.userRank;
+        rank_ave = rank_num / count;
+        if (data.useraccText != "-") {
+            acc += parseFloat(data.useraccText);
+        }
+        acc_ave = acc / count;
+
+        $(".score").text(`score:${score}/${score_max} (${Math.round((score / score_max) * 100)}%)`);
+        $(".rank_1").text(`1st:${rank_1}`);
+        $(".rank_2").text(`2nd:${rank_2}`);
+        $(".rank_3").text(`3rd:${rank_3}`);
+        $(".rank_10").text(`Top10:${rank_10}`);
+        $(".rank_40").text(`Top40:${rank_40}`);
+        $(".rank_41").text(`NoRecord:${rank_41}`);
+        $(".rank_ave").text(`rank:${Math.round((rank_num / links.length))}`);
+        $(".acc").text(`acc:${Math.round((acc / (links.length * 100)) * 100)}%`);
+
+        tsv_datas.push(Object.values(data).join(`\t`) + "\n");
         count++;
         setTimeout(process, 0);
     }
+    
+    async function processBatch(batchSize = 10) {
+    let done = 0;
 
-    process();
+    while (done < links.length) {
+        // 今回のバッチを切り出す
+        const batch = links.slice(done, done + batchSize);
+
+        // 複数まとめて取得
+        const results = await Promise.all(batch.map(id => fetchScore(id)));
+
+        // 集計処理
+        for (const data of results) {
+            score_max += parseInt(data.firstscoreText.replace(/,/g, "")) || 0;
+            if (data.userscoreText !== "-") {
+                score += parseInt(data.userscoreText.replace(/,/g, "")) || 0;
+            }
+
+            if (data.userRank == 1) rank_1++;
+            else if (data.userRank == 2) rank_2++;
+            else if (data.userRank == 3) rank_3++;
+            else if (data.userRank <= 10) rank_10++;
+            else if (data.userRank <= 40) rank_40++;
+            else rank_41++;
+
+            rank_num += data.userRank;
+            if (data.useraccText !== "-") {
+                acc += parseFloat(data.useraccText);
+            }
+
+            // TSV データに追加
+            tsv_datas.push(Object.values(data).join("\t"));
+        }
+
+        done += batch.length;
+
+        // 進捗更新
+        updateProgress(done, links.length);
+
+        // 集計結果表示
+        $(".score").text(`score:${score.toLocaleString()}/${score_max.toLocaleString()} (${Math.round((score / score_max) * 100)}%)`);
+        $(".rank_1").text(`1st:${rank_1}`);
+        $(".rank_2").text(`2nd:${rank_2}`);
+        $(".rank_3").text(`3rd:${rank_3}`);
+        $(".rank_10").text(`Top10:${rank_10}`);
+        $(".rank_40").text(`Top40:${rank_40}`);
+        $(".rank_41").text(`NoRecord:${rank_41}`);
+        $(".rank_ave").text(`ave_rank:${Math.round(rank_num / links.length)}`);
+        $(".acc").text(`ave_acc:${Math.round(acc / done)}%`);
+
+        // 負荷軽減のために小休止
+        await new Promise(r => setTimeout(r, 50));
+    }
+
+    // まとめて書き込み
+    $("#tx").val(tsv_datas.join("\n"));
+
+    alert("全てのリクエストが完了しました");
+    $(".progress-bar").css("background", "linear-gradient(90deg, #2196f3, #64b5f6)");
+}
+
+    processBatch(10);
 })();
