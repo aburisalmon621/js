@@ -34,53 +34,51 @@ javascript: (async function () {
     /* UI 準備 */
     $(".get").remove();
     $(".body").append(`
-    <div class="get" style="font-size:12px; padding:10px; border:1px solid #ccc; margin:10px 0;">
-      <p style="font-size: 13px; margin:0 0 5px;">Player Data</p>
-      <div class="data">
-      <p class="score"></p>
-      <p class="rank_1"></p>
-      <p class="rank_2"></p>
-      <p class="rank_3"></p>
-      <p class="rank_10"></p>
-      <p class="rank_40"></p>
-      <p class="rank_ave"></p>
-      <p class="acc"></p>
-      <p class="acc_ave"></p>
-      </div>
-      <textarea id="tx" cols="250" rows="30" style="width:100%;"></textarea>
-    </div>
-  `);
-
-    /* 進捗バー */
-    $("body").append(`
-    <div class="progress-fixed" style="
-      position:fixed;
-      bottom:0;
-      left:0;
-      width:100%;
-      height:30px;
-      background:#eee;
-      border-top:1px solid #ccc;
-      z-index:9999;
+  <div class="get" style="
+    font-size:14px; 
+    padding:15px; 
+    border:1px solid #ccc; 
+    border-radius:12px; 
+    margin:15px 0;
+    box-shadow:0 2px 6px rgba(0,0,0,0.15);
+    background:#fafafa;
+  ">
+    <h2 style="
+      font-size:18px;
+      margin:0 0 10px;
+      padding-bottom:5px;
+      border-bottom:2px solid #4caf50;
+      color:#333;
+    ">Player Data</h2>
+    
+    <div class="data" style="
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap:8px;
+      margin-bottom:10px;
     ">
-      <div class="progress-bar" style="
-        height:100%;
-        width:0%;
-        background:linear-gradient(90deg, #4caf50, #81c784);
-        transition:width 0.3s;
-      "></div>
-      <span class="progress-text" style="
-        position:absolute;
-        top:0;
-        left:50%;
-        transform:translateX(-50%);
-        font-size:13px;
-        line-height:30px;
-        color:#000;
-        font-weight:bold;
-      ">0%</span>
+      <div class="score" style="font-weight:bold; color:#2e7d32;"></div>
+      <div class="rank_1"></div>
+      <div class="rank_2"></div>
+      <div class="rank_3"></div>
+      <div class="rank_10"></div>
+      <div class="rank_40"></div>
+      <div class="rank_ave"></div>
+      <div class="acc"></div>
+      <div class="acc_ave"></div>
     </div>
-  `);
+
+    <textarea id="tx" cols="250" rows="30" style="
+      width:100%;
+      font-family:monospace;
+      font-size:12px;
+      border-radius:8px;
+      border:1px solid #ccc;
+      padding:5px;
+      box-sizing:border-box;
+    "></textarea>
+  </div>
+`);
 
     const urlBase = `https://m.mugzone.net/page/chart/filter?count=30&mode=${mode}&status=2&key=${key}&page=`;
 
@@ -253,7 +251,7 @@ javascript: (async function () {
         $(".rank_3").text(`3rd:${rank_3}`);
         $(".rank_10").text(`10th:${rank_10}`);
         $(".rank_40").text(`40th:${rank_40}`);
-        $(".rank_ave").text(`rank:${Math.round((rank_num / links.length) * 100)}%`);
+        $(".rank_ave").text(`rank:${Math.round((rank_num / links.length))}`);
         $(".acc").text(`acc:${Math.round((acc / (links.length * 100)) * 100)}%`);
 
         $("#tx").append(Object.values(data).join(`\t`) + "\n");
