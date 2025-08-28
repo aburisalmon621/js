@@ -178,6 +178,7 @@ javascript: (async function () {
         const userscoreText = q(doc, `.score_area li:nth-of-type(${userRank}) .score`);
         const usercomboText = q(doc, `.score_area li:nth-of-type(${userRank}) .combo`);
         const usertimeText = q(doc, `.score_area li:nth-of-type(${userRank}) .time`);
+        if (id == 39494) userRank1 -= 1;
         if (userscoreText.match(firstscoreText)) userRank = 1;
 
         /* ====== ユーザー2の情報 ====== */
@@ -192,10 +193,11 @@ javascript: (async function () {
         const userscoreText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .score`);
         const usercomboText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .combo`);
         const usertimeText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .time`);
+        if (id == 39494) userRank2 -= 1;
         if (userscoreText2.match(firstscoreText)) userRank2 = 1;
 
         return {
-            cId: q(doc, ".sub span"),
+            cId: id,
             title: q(doc, ".title").split(" - ")[1] || "Title not found",
             artist: q(doc, ".artist"),
             mode: q(doc, ".mode span"),
@@ -349,7 +351,7 @@ javascript: (async function () {
         $(".rank_10").text(`Top10:${rank_10}`);
         $(".rank_40").text(`Top40:${rank_40}`);
         $(".rank_41").text(`NoRecord:${rank_41}`);
-        $(".rank_ave").text(`ave_rank:${Math.round(rank_num / links.length)}`);
+        $(".rank_ave").text(`ave_rank:${Math.round(rank_num / done)}`);
         $(".acc").text(`ave_acc:${Math.round(acc / done)}%`);
 
         // 負荷軽減のために小休止
@@ -363,5 +365,5 @@ javascript: (async function () {
     $(".progress-bar").css("background", "linear-gradient(90deg, #2196f3, #64b5f6)");
 }
 
-    processBatch(100);
+    processBatch(50);
 })();
