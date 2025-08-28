@@ -29,7 +29,6 @@ javascript: (async function () {
     let rank_num = 0;
     let rank_ave = 0;
     let acc = 0;
-    let acc_max = 0;
     let acc_ave = 0;
 
     /* UI 準備 */
@@ -118,8 +117,8 @@ javascript: (async function () {
             return 41;
         };
 
-        const userRank = getRank(nameText);    // 1人目
-        const userRank2 = getRank(nameText2);  // 2人目
+        let userRank = getRank(nameText);    // 1人目
+        let userRank2 = getRank(nameText2);  // 2人目
 
         /* ====== 1位の情報 ====== */
         const firstnameText = q(doc, '.score_area li:nth-of-type(1) .name a');
@@ -248,7 +247,14 @@ javascript: (async function () {
         acc += data.useraccText;
         acc_ave = acc / count;
 
-        $(".score").text(`${score}/${score_max} (${Math.round((score / score_max) * 100)}%)`);
+        $(".score").text(`score:${score}/${score_max} (${Math.round((score / score_max) * 100)}%)`);
+        $(".rank_1").text(`1st:${rank_1}`);
+        $(".rank_2").text(`2nd:${rank_2}`);
+        $(".rank_3").text(`3rd:${rank_3}`);
+        $(".rank_10").text(`10th:${rank_10}`);
+        $(".rank_40").text(`40th:${rank_40}`);
+        $(".rank_ave").text(`rank:${rank_ave}/${rank_num}`);
+        $(".acc").text(`acc:${Math.round((acc / (links.length * 100)) * 100)}%`);
 
         $("#tx").append(Object.values(data).join(`\t`) + "\n");
         count++;
