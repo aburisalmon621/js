@@ -26,6 +26,7 @@ javascript: (async function () {
     let rank_3 = 0;
     let rank_10 = 0;
     let rank_40 = 0;
+    let rank_41 = 0;
     let rank_num = 0;
     let rank_ave = 0;
     let acc = 0;
@@ -52,17 +53,18 @@ javascript: (async function () {
     ">Player Data</h2>
     
     <div class="data" style="
-      display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap:8px;
       margin-bottom:10px;
     ">
-      <div class="score" style="font-weight:bold; color:#2e7d32;"></div>
-      <div class="rank_1"></div>
-      <div class="rank_2"></div>
-      <div class="rank_3"></div>
-      <div class="rank_10"></div>
-      <div class="rank_40"></div>
+      <div class="score" style="font-weight:bold;"></div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));">
+        <div class="rank_1"></div>
+        <div class="rank_2"></div>
+        <div class="rank_3"></div>
+        <div class="rank_10"></div>
+        <div class="rank_40"></div>
+        <div class="rank_41"></div>
+      </div>
       <div class="rank_ave"></div>
       <div class="acc"></div>
       <div class="acc_ave"></div>
@@ -79,6 +81,36 @@ javascript: (async function () {
     "></textarea>
   </div>
 `);
+    /* 進捗バー */
+    $("body").append(`
+    <div class="progress-fixed" style="
+      position:fixed;
+      bottom:0;
+      left:0;
+      width:100%;
+      height:30px;
+      background:#eee;
+      border-top:1px solid #ccc;
+      z-index:9999;
+    ">
+      <div class="progress-bar" style="
+        height:100%;
+        width:0%;
+        background:linear-gradient(90deg, #4caf50, #81c784);
+        transition:width 0.3s;
+      "></div>
+      <span class="progress-text" style="
+        position:absolute;
+        top:0;
+        left:50%;
+        transform:translateX(-50%);
+        font-size:13px;
+        line-height:30px;
+        color:#000;
+        font-weight:bold;
+      ">0%</span>
+    </div>
+  `);
 
     const urlBase = `https://m.mugzone.net/page/chart/filter?count=30&mode=${mode}&status=2&key=${key}&page=`;
 
@@ -224,7 +256,9 @@ javascript: (async function () {
         const data = await fetchScore(id);
 
         score_max += parseInt(data.firstscoreText);
-        score += parseInt(data.userscoreText);
+        if (userscoreText) {
+            score += parseInt(data.userscoreText);
+        }
         if (data.userRank == 1) {
             rank_1++;
         }
@@ -242,15 +276,18 @@ javascript: (async function () {
         }
         rank_num += data.userRank;
         rank_ave = rank_num / count;
-        acc += parseFloat(data.useraccText);
+        if (useraccText) {
+            acc += parseFloat(data.useraccText);
+        }
         acc_ave = acc / count;
 
         $(".score").text(`score:${score}/${score_max} (${Math.round((score / score_max) * 100)}%)`);
         $(".rank_1").text(`1st:${rank_1}`);
         $(".rank_2").text(`2nd:${rank_2}`);
         $(".rank_3").text(`3rd:${rank_3}`);
-        $(".rank_10").text(`10th:${rank_10}`);
-        $(".rank_40").text(`40th:${rank_40}`);
+        $(".rank_10").text(`Top10:${rank_10}`);
+        $(".rank_40").text(`Top40:${rank_40}`);
+        $(".rank_41").text(`NoRecord:${rank_41}`);
         $(".rank_ave").text(`rank:${Math.round((rank_num / links.length))}`);
         $(".acc").text(`acc:${Math.round((acc / (links.length * 100)) * 100)}%`);
 
