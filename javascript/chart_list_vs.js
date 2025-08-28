@@ -255,6 +255,7 @@ javascript: (async function () {
         const id = links[count];
         const data = await fetchScore(id);
 
+    console.log(data.userscoreText);
         score_max += parseInt(data.firstscoreText);
         if (data.userscoreText) {
             score += parseInt(data.userscoreText);
@@ -273,6 +274,9 @@ javascript: (async function () {
         }
         else if (data.userRank <= 40) {
             rank_40++;
+        }
+        else {
+            rank_41++;
         }
         rank_num += data.userRank;
         rank_ave = rank_num / count;
