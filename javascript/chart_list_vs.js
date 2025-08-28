@@ -225,8 +225,8 @@ javascript: (async function () {
         const id = links[count];
         const data = await fetchScore(id);
 
-        score_max += data.firstscoreText;
-        score += data.userscoreText;
+        score_max += parseInt(data.firstscoreText);
+        score += parseInt(data.userscoreText);
         if (data.userRank == 1) {
             rank_1++;
         }
@@ -244,7 +244,7 @@ javascript: (async function () {
         }
         rank_num += data.userRank;
         rank_ave = rank_num / count;
-        acc += data.useraccText;
+        acc += parseFloat(data.useraccText);
         acc_ave = acc / count;
 
         $(".score").text(`score:${score}/${score_max} (${Math.round((score / score_max) * 100)}%)`);
@@ -253,7 +253,7 @@ javascript: (async function () {
         $(".rank_3").text(`3rd:${rank_3}`);
         $(".rank_10").text(`10th:${rank_10}`);
         $(".rank_40").text(`40th:${rank_40}`);
-        $(".rank_ave").text(`rank:${rank_ave}/${rank_num}`);
+        $(".rank_ave").text(`rank:${Math.round((rank_num / links.length) * 100)}%`);
         $(".acc").text(`acc:${Math.round((acc / (links.length * 100)) * 100)}%`);
 
         $("#tx").append(Object.values(data).join(`\t`) + "\n");
