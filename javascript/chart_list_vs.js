@@ -257,7 +257,7 @@ javascript: (async function () {
 
     console.log(data.userscoreText);
         score_max += parseInt(data.firstscoreText);
-        if (data.userscoreText) {
+        if (data.userscoreText != "-") {
             score += parseInt(data.userscoreText);
         }
         if (data.userRank == 1) {
@@ -280,7 +280,7 @@ javascript: (async function () {
         }
         rank_num += data.userRank;
         rank_ave = rank_num / count;
-        if (data.useraccText) {
+        if (data.useraccText != "-") {
             acc += parseFloat(data.useraccText);
         }
         acc_ave = acc / count;
