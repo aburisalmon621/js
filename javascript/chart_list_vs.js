@@ -303,7 +303,7 @@ javascript: (async function () {
         setTimeout(process, 0);
     }
     
-    async function processBatch(batchSize = 10) {
+    async function processBatch(batchSize) {
     let done = 0;
 
     while (done < links.length) {
