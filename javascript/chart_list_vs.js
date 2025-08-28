@@ -256,7 +256,7 @@ javascript: (async function () {
         const data = await fetchScore(id);
 
         score_max += parseInt(data.firstscoreText);
-        if (userscoreText) {
+        if (data.userscoreText) {
             score += parseInt(data.userscoreText);
         }
         if (data.userRank == 1) {
@@ -276,7 +276,7 @@ javascript: (async function () {
         }
         rank_num += data.userRank;
         rank_ave = rank_num / count;
-        if (useraccText) {
+        if (data.useraccText) {
             acc += parseFloat(data.useraccText);
         }
         acc_ave = acc / count;
