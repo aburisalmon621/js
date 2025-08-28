@@ -14,21 +14,40 @@ javascript: (async function () {
     /* ユーザー入力 */
     const nameText = prompt("ユーザー1の名前を入力してください:", "hazeiro");
     const nameText2 = prompt("ユーザー2の名前を入力してください:", "");
-    const mode = prompt("モードを入力してください [Key, Step, Dj, Catch, Pad, Taiko, Ring, Slide, Live]:", "0");
+    const mode = prompt("モードを入力してください [0:Key, 1:Step, 2:Dj, 3:Catch, 4:Pad, 5:Taiko, 6:Ring, 7:Slide, 8:Live]:", "0");
     const key = prompt("キーを入力してください:", "");
 
     let count = 0;
     let links = [];
+    let score_max = 0;
+    let score = 0;
+    let rank_1 = 0;
+    let rank_2 = 0;
+    let rank_3 = 0;
+    let rank_10 = 0;
+    let rank_40 = 0;
+    let rank_num = 0;
+    let rank_ave = 0;
+    let acc = 0;
+    let acc_max = 0;
+    let acc_ave = 0;
 
     /* UI 準備 */
     $(".get").remove();
     $(".body").append(`
     <div class="get" style="font-size:12px; padding:10px; border:1px solid #ccc; margin:10px 0;">
-      <p style="font-size: 13px; margin:0 0 5px;">
-        cId,title,artist,mode,editor,na,hot,gold,
-        cFirst,dFirst,eFirst,lastUpdate,
-        userrank,useracc,userjudgecount,userscore,usercombo,usertimecombo
-      </p>
+      <p style="font-size: 13px; margin:0 0 5px;">Player Data</p>
+      <div class="data">
+      <p class="score"></p>
+      <p class="rank_1"></p>
+      <p class="rank_2"></p>
+      <p class="rank_3"></p>
+      <p class="rank_10"></p>
+      <p class="rank_40"></p>
+      <p class="rank_ave"></p>
+      <p class="acc"></p>
+      <p class="acc_ave"></p>
+      </div>
       <textarea id="tx" cols="250" rows="30" style="width:100%;"></textarea>
     </div>
   `);
@@ -206,6 +225,30 @@ javascript: (async function () {
 
         const id = links[count];
         const data = await fetchScore(id);
+
+        score_max += data.firstscoreText;
+        score += data.userscoreText;
+        if (data.userRank == 1) {
+            rank_1++;
+        }
+        else if (data.userRank == 2) {
+            rank_2++;
+        }
+        else if (data.userRank == 3) {
+            rank_3++;
+        }
+        else if (data.userRank <= 10) {
+            rank_10++;
+        }
+        else if (data.userRank <= 40) {
+            rank_40++;
+        }
+        rank_num += data.userRank;
+        rank_ave = rank_num / count;
+        acc += data.useraccText;
+        acc_ave = acc / count;
+
+        $(".score").text(`${score}/${score_max} (${Math.round((score / score_max) * 100)}%)`);
 
         $("#tx").append(Object.values(data).join(`\t`) + "\n");
         count++;
