@@ -364,10 +364,12 @@ javascript: (async function () {
         $(".rank_40").text(`Top40:${rank_40}`);
         $(".rank_41").text(`NoRecord:${rank_41}`);
         $(".rank_ave").text(`ave_rank:${Math.round(rank_num / done)}`);
+        $(".rh_100").text(`RH 100%:${rh_100}`);
+        $(".rh_99").text(`RH 99%:${rh_99}`);
         $(".acc").text(`ave_acc:${Math.round(acc / done)}%`);
 
         // 負荷軽減のために小休止
-        await new Promise(r => setTimeout(r, 50));
+        await new Promise(r => setTimeout(r, 10));
     }
 
     // まとめて書き込み
