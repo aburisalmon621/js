@@ -32,6 +32,7 @@ javascript: (async function () {
     let rank_ave = 0;
     let rh_100 = 0;
     let rh_99 = 0;
+    let rh_98 = 0;
     let acc = 0;
     let acc_ave = 0;
 
@@ -71,6 +72,7 @@ javascript: (async function () {
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));gap:8px;margin-bottom:10px;">
         <div class="rh_100"></div>
         <div class="rh_99"></div>
+        <div class="rh_98"></div>
       </div>
       <div class="acc"></div>
       <div class="acc_ave"></div>
@@ -352,9 +354,11 @@ javascript: (async function () {
                         rh_100++;
                     } else if (accValue >= 99) {
                         rh_99++;
+                    } else if (accValue >= 98) {
+                        rh_98++;
                     }
                 }
-                
+
                 rank_num += data.userRank;
                 if (data.useraccText !== "-") {
                     acc += parseFloat(data.useraccText);
@@ -380,6 +384,7 @@ javascript: (async function () {
             $(".rank_ave").text(`ave_rank:${Math.round(rank_num / done)}`);
             $(".rh_100").text(`RH 100%:${rh_100}`);
             $(".rh_99").text(`RH 99%:${rh_99}`);
+            $(".rh_98").text(`RH 98%:${rh_98}`);
             $(".acc").text(`ave_acc:${Math.round(acc / done)}%`);
 
             // 負荷軽減のために小休止
