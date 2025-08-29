@@ -289,6 +289,8 @@ javascript: (async function () {
         }
         rank_num += data.userRank;
         rank_ave = rank_num / count;
+
+        console.log(data.useraccText);
         const accValue = parseFloat((data.useraccText || "0").replace("%", "").trim());
 
         if (data.usermodText === "RH") {
