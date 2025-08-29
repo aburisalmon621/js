@@ -56,7 +56,7 @@ javascript: (async function () {
     ">Player Data</h2>
     
     <div class="data" style="margin-bottom:10px;">
-      <div class="score" style="font-weight:bold;"></div>
+      <div class="score" style="font-weight:bold;margin-bottom:10px;"></div>
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));gap:8px;margin-bottom:10px;">
         <div class="rank_1"></div>
         <div class="rank_2"></div>
