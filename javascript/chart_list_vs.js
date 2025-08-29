@@ -346,6 +346,15 @@ javascript: (async function () {
                 else if (data.userRank <= 40) rank_40++;
                 else rank_41++;
 
+                const accValue = parseFloat((data.useraccText || "0").replace("%", "").trim());
+                if (data.usermodText === "RH") {
+                    if (accValue == 100) {
+                        rh_100++;
+                    } else if (accValue >= 99) {
+                        rh_99++;
+                    }
+                }
+                
                 rank_num += data.userRank;
                 if (data.useraccText !== "-") {
                     acc += parseFloat(data.useraccText);
