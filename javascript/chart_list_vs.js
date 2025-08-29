@@ -30,6 +30,8 @@ javascript: (async function () {
     let rank_41 = 0;
     let rank_num = 0;
     let rank_ave = 0;
+    let rh_100 = 0;
+    let rh_99 = 0;
     let acc = 0;
     let acc_ave = 0;
 
@@ -53,21 +55,23 @@ javascript: (async function () {
       color:#333;
     ">Player Data</h2>
     
-    <div class="data" style="
-      margin-bottom:10px;
-    ">
+    <div class="data" style="margin-bottom:10px;">
       <div class="score" style="font-weight:bold;"></div>
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));gap:8px;">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));gap:8px;margin-bottom:10px;">
         <div class="rank_1"></div>
         <div class="rank_2"></div>
         <div class="rank_3"></div>
       </div>
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));gap:8px;">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));gap:8px;margin-bottom:10px;">
         <div class="rank_10"></div>
         <div class="rank_40"></div>
         <div class="rank_41"></div>
       </div>
       <div class="rank_ave"></div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));gap:8px;margin-bottom:10px;">
+        <div class="rh_100"></div>
+        <div class="rh_99"></div>
+      </div>
       <div class="acc"></div>
       <div class="acc_ave"></div>
     </div>
@@ -285,6 +289,12 @@ javascript: (async function () {
         }
         rank_num += data.userRank;
         rank_ave = rank_num / count;
+        if(data.usermodText == "RH" && parseFloat(data.useraccText) == 100){
+            rh_100++;
+        }
+        else if(data.usermodText == "RH" && parseFloat(data.useraccText) >= 99){
+            rh_99++;
+        }
         if (data.useraccText != "-") {
             acc += parseFloat(data.useraccText);
         }
@@ -298,6 +308,8 @@ javascript: (async function () {
         $(".rank_40").text(`Top40:${rank_40}`);
         $(".rank_41").text(`NoRecord:${rank_41}`);
         $(".rank_ave").text(`rank:${Math.round((rank_num / links.length))}`);
+        $(".rh_100").text(`RH 100%:${rh_100}`);
+        $(".rh_99").text(`RH 99%:${rh_99}`);
         $(".acc").text(`acc:${Math.round((acc / (links.length * 100)) * 100)}%`);
 
         tsv_datas.push(Object.values(data).join(`\t`) + "\n");
