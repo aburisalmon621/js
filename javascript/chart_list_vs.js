@@ -289,11 +289,14 @@ javascript: (async function () {
         }
         rank_num += data.userRank;
         rank_ave = rank_num / count;
-        if(data.usermodText == "RH" && parseFloat(data.useraccText) == 100){
-            rh_100++;
-        }
-        else if(data.usermodText == "RH" && parseFloat(data.useraccText) >= 99){
-            rh_99++;
+        const accValue = parseFloat((data.useraccText || "0").replace("%", "").trim());
+
+        if (data.usermodText === "RH") {
+            if (accValue == 100) {
+                rh_100++;
+            } else if (accValue >= 99) {
+                rh_99++;
+            }
         }
         if (data.useraccText != "-") {
             acc += parseFloat(data.useraccText);
@@ -307,77 +310,77 @@ javascript: (async function () {
         $(".rank_10").text(`Top10:${rank_10}`);
         $(".rank_40").text(`Top40:${rank_40}`);
         $(".rank_41").text(`NoRecord:${rank_41}`);
-        $(".rank_ave").text(`rank:${Math.round((rank_num / links.length))}`);
+        $(".rank_ave").text(`rank:${Math.round((rank_num / done))}`);
         $(".rh_100").text(`RH 100%:${rh_100}`);
         $(".rh_99").text(`RH 99%:${rh_99}`);
-        $(".acc").text(`acc:${Math.round((acc / (links.length * 100)) * 100)}%`);
+        $(".acc").text(`acc:${Math.round((acc / (done * 100)) * 100)}%`);
 
         tsv_datas.push(Object.values(data).join(`\t`) + "\n");
         count++;
         setTimeout(process, 0);
     }
-    
+
     async function processBatch(batchSize) {
-    let done = 0;
+        let done = 0;
 
-    while (done < links.length) {
-        // 今回のバッチを切り出す
-        const batch = links.slice(done, done + batchSize);
+        while (done < links.length) {
+            // 今回のバッチを切り出す
+            const batch = links.slice(done, done + batchSize);
 
-        // 複数まとめて取得
-        const results = await Promise.all(batch.map(id => fetchScore(id)));
+            // 複数まとめて取得
+            const results = await Promise.all(batch.map(id => fetchScore(id)));
 
-        // 集計処理
-        for (const data of results) {
-            score_max += parseInt(data.firstscoreText.replace(/,/g, "")) || 0;
-            if (data.userscoreText !== "-") {
-                score += parseInt(data.userscoreText.replace(/,/g, "")) || 0;
+            // 集計処理
+            for (const data of results) {
+                score_max += parseInt(data.firstscoreText.replace(/,/g, "")) || 0;
+                if (data.userscoreText !== "-") {
+                    score += parseInt(data.userscoreText.replace(/,/g, "")) || 0;
+                }
+
+                if (data.userRank == 1) rank_1++;
+                else if (data.userRank == 2) rank_2++;
+                else if (data.userRank == 3) rank_3++;
+                else if (data.userRank <= 10) rank_10++;
+                else if (data.userRank <= 40) rank_40++;
+                else rank_41++;
+
+                rank_num += data.userRank;
+                if (data.useraccText !== "-") {
+                    acc += parseFloat(data.useraccText);
+                }
+
+                // TSV データに追加
+                tsv_datas.push(Object.values(data).join("\t"));
             }
 
-            if (data.userRank == 1) rank_1++;
-            else if (data.userRank == 2) rank_2++;
-            else if (data.userRank == 3) rank_3++;
-            else if (data.userRank <= 10) rank_10++;
-            else if (data.userRank <= 40) rank_40++;
-            else rank_41++;
+            done += batch.length;
 
-            rank_num += data.userRank;
-            if (data.useraccText !== "-") {
-                acc += parseFloat(data.useraccText);
-            }
+            // 進捗更新
+            updateProgress(done, links.length);
 
-            // TSV データに追加
-            tsv_datas.push(Object.values(data).join("\t"));
+            // 集計結果表示
+            $(".score").text(`score:${score.toLocaleString()}/${score_max.toLocaleString()} (${Math.round((score / score_max) * 100)}%)`);
+            $(".rank_1").text(`1st:${rank_1}`);
+            $(".rank_2").text(`2nd:${rank_2}`);
+            $(".rank_3").text(`3rd:${rank_3}`);
+            $(".rank_10").text(`Top10:${rank_10}`);
+            $(".rank_40").text(`Top40:${rank_40}`);
+            $(".rank_41").text(`NoRecord:${rank_41}`);
+            $(".rank_ave").text(`ave_rank:${Math.round(rank_num / done)}`);
+            $(".rh_100").text(`RH 100%:${rh_100}`);
+            $(".rh_99").text(`RH 99%:${rh_99}`);
+            $(".acc").text(`ave_acc:${Math.round(acc / done)}%`);
+
+            // 負荷軽減のために小休止
+            await new Promise(r => setTimeout(r, 10));
         }
 
-        done += batch.length;
+        // まとめて書き込み
+        $("#tx").val(tsv_datas.join("\n"));
 
-        // 進捗更新
-        updateProgress(done, links.length);
-
-        // 集計結果表示
-        $(".score").text(`score:${score.toLocaleString()}/${score_max.toLocaleString()} (${Math.round((score / score_max) * 100)}%)`);
-        $(".rank_1").text(`1st:${rank_1}`);
-        $(".rank_2").text(`2nd:${rank_2}`);
-        $(".rank_3").text(`3rd:${rank_3}`);
-        $(".rank_10").text(`Top10:${rank_10}`);
-        $(".rank_40").text(`Top40:${rank_40}`);
-        $(".rank_41").text(`NoRecord:${rank_41}`);
-        $(".rank_ave").text(`ave_rank:${Math.round(rank_num / done)}`);
-        $(".rh_100").text(`RH 100%:${rh_100}`);
-        $(".rh_99").text(`RH 99%:${rh_99}`);
-        $(".acc").text(`ave_acc:${Math.round(acc / done)}%`);
-
-        // 負荷軽減のために小休止
-        await new Promise(r => setTimeout(r, 10));
+        alert("全てのリクエストが完了しました");
+        $(".progress-bar").css("background", "linear-gradient(90deg, #2196f3, #64b5f6)");
     }
 
-    // まとめて書き込み
-    $("#tx").val(tsv_datas.join("\n"));
-
-    alert("全てのリクエストが完了しました");
-    $(".progress-bar").css("background", "linear-gradient(90deg, #2196f3, #64b5f6)");
-}
-
-    processBatch(50);
+    processBatch(10);
 })();
