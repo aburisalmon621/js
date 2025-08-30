@@ -424,7 +424,7 @@ javascript: (async function () {
             $(".rh_98").text(`RH 98%:${rh_98}`);
             $(".rh_0").text(`RH any%:${rh_0}`);
             $(".dh_0").text(`DH any%:${dh_0}`);
-            $(".nomod_0").text(`nomod any%:${nomod_0}`);
+            $(".nomod_0").text(`- any%:${nomod_0}`);
             $(".acc").text(`ave_acc:${Math.round(acc / done)}%`);
 
             // 負荷軽減のために小休止
