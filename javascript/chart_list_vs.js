@@ -438,5 +438,5 @@ javascript: (async function () {
         $(".progress-bar").css("background", "linear-gradient(90deg, #2196f3, #64b5f6)");
     }
 
-    processBatch(10);
+    processBatch(20);
 })();
