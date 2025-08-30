@@ -58,7 +58,7 @@ javascript: (async function () {
       padding-bottom:5px;
       border-bottom:2px solid #4caf50;
       color:#333;
-    ">Player Data\n${mode_datas[mode]} ${key}</h2>
+    ">Player Data<br>${mode_datas[mode]} ${key}</h2>
     
     <div class="data" style="margin-bottom:10px;">
       <div class="score" style="font-weight:bold;margin-bottom:10px;"></div>
