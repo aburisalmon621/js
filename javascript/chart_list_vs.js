@@ -90,7 +90,7 @@ javascript: (async function () {
     <!-- 開閉式 TSV 出力結果 -->
     <div style="border-top:1px solid #ccc; padding-top:10px;">
       <div id="toggle-header" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
-        <span style="font-size:14px; font-weight:bold; color:#333;">TSV 出力結果</span>
+        <span style="font-size:14px; font-weight:bold; color:#333;">text_data</span>
         <span id="toggle-btn" style="font-size:18px; user-select:none;">▼</span>
       </div>
       <div id="toggle-content" style="margin-top:10px; display:none;">
