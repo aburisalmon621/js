@@ -35,6 +35,8 @@ javascript: (async function () {
     let rh_99 = 0;
     let rh_98 = 0;
     let rh_0 = 0;
+    let dh_0 = 0;
+    let nomod_0 = 0;
     let acc = 0;
     let acc_ave = 0;
 
@@ -70,13 +72,17 @@ javascript: (async function () {
         <div class="rank_40"></div>
         <div class="rank_41"></div>
       </div>
-      <div class="rank_ave"></div>
+      <div class="rank_ave" style="margin-bottom:10px;"></div>
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));gap:8px;margin-bottom:10px;">
         <div class="rh_100"></div>
         <div class="rh_99"></div>
         <div class="rh_98"></div>
       </div>
-      <div class="rh_0" style="margin-bottom:10px;"></div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));gap:8px;margin-bottom:10px;">
+        <div class="rh_0"></div>
+        <div class="dh_0"></div>
+        <div class="nomod_0"></div>
+      </div>
       <div class="acc"></div>
       <div class="acc_ave"></div>
     </div>
@@ -363,6 +369,11 @@ javascript: (async function () {
                         rh_0++;
                     }
                 }
+                else if (data.usermodText === "DH") {
+                    dh_0++;
+                } else {
+                    nomod_0++;
+                }
 
                 rank_num += data.userRank;
                 if (data.useraccText !== "-") {
@@ -390,7 +401,9 @@ javascript: (async function () {
             $(".rh_100").text(`RH 100%:${rh_100}`);
             $(".rh_99").text(`RH 99%:${rh_99}`);
             $(".rh_98").text(`RH 98%:${rh_98}`);
-            $(".rh_0").text(`any%:${rh_0}`);
+            $(".rh_0").text(`RH any%:${rh_0}`);
+            $(".dh_0").text(`DH any%:${dh_0}`);
+            $(".nomod_0").text(`nomod any%:${nomod_0}`);
             $(".acc").text(`ave_acc:${Math.round(acc / done)}%`);
 
             // 負荷軽減のために小休止
