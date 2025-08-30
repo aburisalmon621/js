@@ -87,17 +87,38 @@ javascript: (async function () {
       <div class="acc_ave"></div>
     </div>
 
-    <textarea id="tx" cols="250" rows="30" style="
-      width:100%;
-      font-family:monospace;
-      font-size:12px;
-      border-radius:8px;
-      border:1px solid #ccc;
-      padding:5px;
-      box-sizing:border-box;
-    "></textarea>
+    <!-- 開閉式 TSV 出力結果 -->
+    <div style="border-top:1px solid #ccc; padding-top:10px;">
+      <div id="toggle-header" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+        <span style="font-size:14px; font-weight:bold; color:#333;">TSV 出力結果</span>
+        <span id="toggle-btn" style="font-size:18px; user-select:none;">▼</span>
+      </div>
+      <div id="toggle-content" style="margin-top:10px; display:none;">
+        <textarea id="tx" rows="20" style="
+          width:100%;
+          font-family:monospace;
+          font-size:12px;
+          border-radius:8px;
+          border:1px solid #ccc;
+          padding:5px;
+          box-sizing:border-box;
+        "></textarea>
+      </div>
+    </div>
   </div>
 `);
+    /* 開閉処理 */
+    $("#toggle-header").on("click", function () {
+        const content = $("#toggle-content");
+        const btn = $("#toggle-btn");
+        if (content.is(":visible")) {
+            content.slideUp(200);
+            btn.text("▼");
+        } else {
+            content.slideDown(200);
+            btn.text("▲");
+        }
+    });
     /* 進捗バー */
     $("body").append(`
     <div class="progress-fixed" style="
