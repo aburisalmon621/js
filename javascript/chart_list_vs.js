@@ -214,7 +214,7 @@ javascript: (async function () {
         const userscoreText = q(doc, `.score_area li:nth-of-type(${userRank}) .score`);
         const usercomboText = q(doc, `.score_area li:nth-of-type(${userRank}) .combo`);
         const usertimeText = q(doc, `.score_area li:nth-of-type(${userRank}) .time`);
-        if (id == 39494) userRank -= 1;
+        if (id == 39494 || id == 118012) userRank -= 1;
         if (userscoreText.match(firstscoreText)) userRank = 1;
 
         /* ====== ユーザー2の情報 ====== */
@@ -229,7 +229,7 @@ javascript: (async function () {
         const userscoreText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .score`);
         const usercomboText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .combo`);
         const usertimeText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .time`);
-        if (id == 39494) userRank2 -= 1;
+        if (id == 39494 || id == 118012) userRank2 -= 1;
         if (userscoreText2.match(firstscoreText)) userRank2 = 1;
 
         return {
