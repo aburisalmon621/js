@@ -12,6 +12,7 @@ javascript: (async function () {
     console.log("jQuery:", $().jquery);
 
     /* ユーザー入力 */
+    const mode_datas = ["Key", "Step", "Dj", "Catch", "Pad", "Taiko", "Ring", "Slide", "Live"];
     const nameText = prompt("ユーザー1の名前を入力してください:", "hazeiro");
     const nameText2 = prompt("ユーザー2の名前を入力してください:", "");
     const mode = prompt("モードを入力してください [0:Key, 1:Step, 2:Dj, 3:Catch, 4:Pad, 5:Taiko, 6:Ring, 7:Slide, 8:Live]:", "0");
@@ -55,7 +56,7 @@ javascript: (async function () {
       padding-bottom:5px;
       border-bottom:2px solid #4caf50;
       color:#333;
-    ">Player Data</h2>
+    ">Player Data\n${mode_datas[mode]} ${key}</h2>
     
     <div class="data" style="margin-bottom:10px;">
       <div class="score" style="font-weight:bold;margin-bottom:10px;"></div>
