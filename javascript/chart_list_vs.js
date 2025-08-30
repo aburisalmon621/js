@@ -33,6 +33,7 @@ javascript: (async function () {
     let rh_100 = 0;
     let rh_99 = 0;
     let rh_98 = 0;
+    let rh_0 = 0;
     let acc = 0;
     let acc_ave = 0;
 
@@ -74,6 +75,7 @@ javascript: (async function () {
         <div class="rh_99"></div>
         <div class="rh_98"></div>
       </div>
+      <div class="rh_0" style="margin-bottom:10px;"></div>
       <div class="acc"></div>
       <div class="acc_ave"></div>
     </div>
@@ -356,6 +358,8 @@ javascript: (async function () {
                         rh_99++;
                     } else if (accValue >= 98) {
                         rh_98++;
+                    } else {
+                        rh_0++;
                     }
                 }
 
@@ -385,6 +389,7 @@ javascript: (async function () {
             $(".rh_100").text(`RH 100%:${rh_100}`);
             $(".rh_99").text(`RH 99%:${rh_99}`);
             $(".rh_98").text(`RH 98%:${rh_98}`);
+            $(".rh_0").text(`any%:${rh_0}`);
             $(".acc").text(`ave_acc:${Math.round(acc / done)}%`);
 
             // 負荷軽減のために小休止
