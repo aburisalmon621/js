@@ -97,7 +97,7 @@ javascript: (async function () {
         <textarea id="tx" rows="20" style="
           width:100%;
           font-family:monospace;
-          font-size:12px;
+          font-size:8px;
           border-radius:8px;
           border:1px solid #ccc;
           padding:5px;
