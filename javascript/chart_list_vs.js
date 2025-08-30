@@ -411,7 +411,7 @@ javascript: (async function () {
             updateProgress(done, links.length);
 
             // 集計結果表示
-            $(".score").text(`score:${score.toLocaleString()}/${score_max.toLocaleString()} (${Math.round((score / score_max) * 100)}%)`);
+            $(".score").text(`score:${score.toLocaleString()}/${score_max.toLocaleString()} (${(score / score_max * 100)}%)`);
             $(".rank_1").text(`1st:${rank_1}`);
             $(".rank_2").text(`2nd:${rank_2}`);
             $(".rank_3").text(`3rd:${rank_3}`);
@@ -425,7 +425,7 @@ javascript: (async function () {
             $(".rh_0").text(`RH any%:${rh_0}`);
             $(".dh_0").text(`DH any%:${dh_0}`);
             $(".nomod_0").text(`- any%:${nomod_0}`);
-            $(".acc").text(`ave_acc:${Math.round(acc / done)}%`);
+            $(".acc").text(`ave_acc:${acc / done}%`);
 
             // 負荷軽減のために小休止
             await new Promise(r => setTimeout(r, 10));
