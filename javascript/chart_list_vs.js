@@ -126,7 +126,7 @@ javascript: (async function () {
       bottom:0;
       left:0;
       width:100%;
-      height:30px;
+      height:40px;
       background:#eee;
       border-top:1px solid #ccc;
       z-index:9999;
