@@ -189,18 +189,22 @@ javascript: (async function () {
         let userRank2 = getRank(nameText2);  // 2人目
 
         /* ====== 1位の情報 ====== */
-        const firstnameText = q(doc, '.score_area li:nth-of-type(1) .name a');
-        let firstmodText = "-";
-        const firstmodElement = doc.querySelector('.score_area li:nth-of-type(1) .mod i');
-        if (firstmodElement) {
-            if (firstmodElement.classList.contains('g_mod_4')) firstmodText = "DH";
-            else if (firstmodElement.classList.contains('g_mod_5')) firstmodText = "RH";
+        const first_num = 1;
+        if(id == 39494 || id == 118012){
+            first_num = 2;
         }
-        const firstaccText = q(doc, '.score_area li:nth-of-type(1) .acc em');
-        const firstjudgecountText = doc.querySelector('.score_area li:nth-of-type(1)')?.getAttribute('title') || '-';
-        const firstscoreText = q(doc, '.score_area li:nth-of-type(1) .score');
-        const firstcomboText = q(doc, '.score_area li:nth-of-type(1) .combo');
-        const firsttimeText = q(doc, '.score_area li:nth-of-type(1) .time');
+        const firstnameText = q(doc, `.score_area li:nth-of-type(${first_num}) .name a`);
+        let firstmodText = "-";
+        const firstmodElement = doc.querySelector(`.score_area li:nth-of-type(${first_num}) .mod i`);
+        if (firstmodElement) {
+            if (firstmodElement.classList.contains(`g_mod_4`)) firstmodText = "DH";
+            else if (firstmodElement.classList.contains(`g_mod_5`)) firstmodText = "RH";
+        }
+        const firstaccText = q(doc, `.score_area li:nth-of-type(${first_num}) .acc em`);
+        const firstjudgecountText = doc.querySelector(`.score_area li:nth-of-type(${first_num})`)?.getAttribute(`title`) || `-`;
+        const firstscoreText = q(doc, `.score_area li:nth-of-type(${first_num}) .score`);
+        const firstcomboText = q(doc, `.score_area li:nth-of-type(${first_num}) .combo`);
+        const firsttimeText = q(doc, `.score_area li:nth-of-type(${first_num}) .time`);
 
         /* ====== ユーザー1の情報 ====== */
         let usermodText = "-";
