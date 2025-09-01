@@ -189,7 +189,7 @@ javascript: (async function () {
         let userRank2 = getRank(nameText2);  // 2人目
 
         /* ====== 1位の情報 ====== */
-        const first_num = 1;
+        let first_num = 1;
         if(id == 39494 || id == 118012){
             first_num = 2;
         }
