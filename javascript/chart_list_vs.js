@@ -97,7 +97,7 @@ javascript: (async function () {
         <textarea id="tx" rows="20" style="
           width:100%;
           font-family:monospace;
-          font-size:12px;
+          font-size:8px;
           border-radius:8px;
           border:1px solid #ccc;
           padding:5px;
@@ -126,7 +126,7 @@ javascript: (async function () {
       bottom:0;
       left:0;
       width:100%;
-      height:30px;
+      height:40px;
       background:#eee;
       border-top:1px solid #ccc;
       z-index:9999;
@@ -189,18 +189,22 @@ javascript: (async function () {
         let userRank2 = getRank(nameText2);  // 2人目
 
         /* ====== 1位の情報 ====== */
-        const firstnameText = q(doc, '.score_area li:nth-of-type(1) .name a');
-        let firstmodText = "-";
-        const firstmodElement = doc.querySelector('.score_area li:nth-of-type(1) .mod i');
-        if (firstmodElement) {
-            if (firstmodElement.classList.contains('g_mod_4')) firstmodText = "DH";
-            else if (firstmodElement.classList.contains('g_mod_5')) firstmodText = "RH";
+        let first_num = 1;
+        if(id == 39494 || id == 118012){
+            first_num = 2;
         }
-        const firstaccText = q(doc, '.score_area li:nth-of-type(1) .acc em');
-        const firstjudgecountText = doc.querySelector('.score_area li:nth-of-type(1)')?.getAttribute('title') || '-';
-        const firstscoreText = q(doc, '.score_area li:nth-of-type(1) .score');
-        const firstcomboText = q(doc, '.score_area li:nth-of-type(1) .combo');
-        const firsttimeText = q(doc, '.score_area li:nth-of-type(1) .time');
+        const firstnameText = q(doc, `.score_area li:nth-of-type(${first_num}) .name a`);
+        let firstmodText = "-";
+        const firstmodElement = doc.querySelector(`.score_area li:nth-of-type(${first_num}) .mod i`);
+        if (firstmodElement) {
+            if (firstmodElement.classList.contains(`g_mod_4`)) firstmodText = "DH";
+            else if (firstmodElement.classList.contains(`g_mod_5`)) firstmodText = "RH";
+        }
+        const firstaccText = q(doc, `.score_area li:nth-of-type(${first_num}) .acc em`);
+        const firstjudgecountText = doc.querySelector(`.score_area li:nth-of-type(${first_num})`)?.getAttribute(`title`) || `-`;
+        const firstscoreText = q(doc, `.score_area li:nth-of-type(${first_num}) .score`);
+        const firstcomboText = q(doc, `.score_area li:nth-of-type(${first_num}) .combo`);
+        const firsttimeText = q(doc, `.score_area li:nth-of-type(${first_num}) .time`);
 
         /* ====== ユーザー1の情報 ====== */
         let usermodText = "-";
@@ -214,7 +218,7 @@ javascript: (async function () {
         const userscoreText = q(doc, `.score_area li:nth-of-type(${userRank}) .score`);
         const usercomboText = q(doc, `.score_area li:nth-of-type(${userRank}) .combo`);
         const usertimeText = q(doc, `.score_area li:nth-of-type(${userRank}) .time`);
-        if (id == 39494) userRank -= 1;
+        if (id == 39494 || id == 118012) userRank -= 1;
         if (userscoreText.match(firstscoreText)) userRank = 1;
 
         /* ====== ユーザー2の情報 ====== */
@@ -229,7 +233,7 @@ javascript: (async function () {
         const userscoreText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .score`);
         const usercomboText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .combo`);
         const usertimeText2 = q(doc, `.score_area li:nth-of-type(${userRank2}) .time`);
-        if (id == 39494) userRank2 -= 1;
+        if (id == 39494 || id == 118012) userRank2 -= 1;
         if (userscoreText2.match(firstscoreText)) userRank2 = 1;
 
         return {
@@ -411,7 +415,7 @@ javascript: (async function () {
             updateProgress(done, links.length);
 
             // 集計結果表示
-            $(".score").text(`score:${score.toLocaleString()}/${score_max.toLocaleString()} (${Math.round((score / score_max) * 100)}%)`);
+            $(".score").text(`score:${score.toLocaleString()}/${score_max.toLocaleString()} (${(score / score_max * 100).toFixed(2)}%)`);
             $(".rank_1").text(`1st:${rank_1}`);
             $(".rank_2").text(`2nd:${rank_2}`);
             $(".rank_3").text(`3rd:${rank_3}`);
@@ -424,8 +428,8 @@ javascript: (async function () {
             $(".rh_98").text(`RH 98%:${rh_98}`);
             $(".rh_0").text(`RH any%:${rh_0}`);
             $(".dh_0").text(`DH any%:${dh_0}`);
-            $(".nomod_0").text(`nomod any%:${nomod_0}`);
-            $(".acc").text(`ave_acc:${Math.round(acc / done)}%`);
+            $(".nomod_0").text(`- any%:${nomod_0}`);
+            $(".acc").text(`ave_acc:${(acc / done).toFixed(2)}%`);
 
             // 負荷軽減のために小休止
             await new Promise(r => setTimeout(r, 10));
@@ -438,5 +442,5 @@ javascript: (async function () {
         $(".progress-bar").css("background", "linear-gradient(90deg, #2196f3, #64b5f6)");
     }
 
-    processBatch(10);
+    processBatch(20);
 })();
